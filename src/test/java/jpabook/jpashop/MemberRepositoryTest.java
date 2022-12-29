@@ -1,5 +1,6 @@
 package jpabook.jpashop;
 
+import jpabook.jpashop.domain.Member;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ class MemberRepositoryTest {
     void testMember() {
         // given
         Member member = new Member();
-        member.setUsername("memberA");
+        member.setName("memberA");
 
         // when
         Long saveId = memberRepository.save(member);
@@ -30,7 +31,7 @@ class MemberRepositoryTest {
 
         // then
         assertThat(findMember.getId()).isEqualTo(member.getId());
-        assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
+        assertThat(findMember.getName()).isEqualTo(member.getName());
         assertThat(findMember).isEqualTo(member);
         System.out.println("findMember == member: " + (findMember == member));
         // 같은 영속성 컨텍스트 안에서 식별자가 같으면 같은 엔티티로 인식함.

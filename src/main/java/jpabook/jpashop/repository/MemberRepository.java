@@ -1,17 +1,19 @@
 package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class MemberRepository {
 
-    @PersistenceContext // JPA 표준 어노테이션, 스프링이 EntityManager 를 만들어서 주입해줌.
-    private EntityManager em;
+// @PersistenceContext -> JPA 표준 어노테이션, 스프링이 EntityManager 를 만들어서 주입해줌.
+// spring boot data jpa 라이브러리를 사용하면, EntityManager 를 @Autowired 와 생성자 주입 스타일로 적용할 수 있다.
+    private final EntityManager em;
 
     public void save(Member member) {
         em.persist(member); // 트랜잭션이 커밋 되는 시점에 insert 쿼리가 나가게 됨.

@@ -28,6 +28,7 @@ public class MemberService {
     @Transactional // 쓰기 작업인 가입은 "readOnly=false" 인 기본 @Transactional 을 지정함.
     public Long join(Member member) {
         validateDuplicateMember(member); // 중복 회원 검증
+        memberRepository.save(member);
         return member.getId(); // em.persist(member) 에 의해 영속성 컨텍스트에 등록된 객체의 키값인 id를 리턴함. -> 디비가 아닌 영속성 컨테이너에서 해당 id(PK) 값으로 조회 가능.
     }
 

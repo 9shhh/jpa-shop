@@ -1,7 +1,9 @@
 package jpabook.jpashop.domain;
 
 import jpabook.jpashop.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 인자가 없는 생성자를 protected 레벨로 생성해줌.
 public class OrderItem {
 
     @Id
@@ -29,6 +32,9 @@ public class OrderItem {
     private int orderPrice; //주문 당시 가격
 
     private int count; //주문 당시 수량
+
+    // protected OrderItem() {} => jpa 는 protected 까지 기본 생성자를 만들 수 있음. 그리고, jpa 에서 protected 생성자를 선언했다는 것은 new 로 객체 생성을 하지 말라는 의미임.
+    // createOrderItem 이라는 생성 메소드로 데이터 생성을 처리하게 했지만, setter 를 통한 데이터 추가 및 생성도 가능하기 때문에 protected 생성자를 통해 객체 생성을 제한함.
 
     //==생성 메소드==//
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {

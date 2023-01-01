@@ -52,4 +52,52 @@ public class Order {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
+
+    //==생성 메소드==//
+    public static Order createOrder(Member member, Delivery delivery, OrderItem ...orderItems) {
+        // 외부에 Order 를 new 해서 set...(...), 하는 방식이 아니라, 주문 생성에 대한 복잡한 로직을 생성 메소드를 통해 완결을 시킴.
+        // 따라서, 주문 생성에 대한 부분을 수정하려면 해당 주문 생성 메소드만 수정 하면 된다.
+
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    //==비즈니스 로직==//
+    /**
+     * 주문 취소
+     */
+    public void cancel() {
+        // 주문 취소 유효 판단
+        if (delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송이 완료된 상품은 취고사 불가능합니다.");
+        }
+
+        // 취소가 유효 하여 취소 상태로 변경 및 취소
+        this.setStatus(OrderStatus.CANCEL);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
+
+    //==조회 로직==//
+
+    /**
+     * 전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            // 주문 상품 개별의 (가격 * 수량) 한 가격을 모두 더함.
+            // ex) 한 주문에 A책(10000원) 3권 + B첵(15000) * 3권
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 }

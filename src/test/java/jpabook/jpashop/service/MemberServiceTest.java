@@ -2,11 +2,11 @@ package jpabook.jpashop.service;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Description;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ class MemberServiceTest {
     MemberRepository memberRepository;
 
     @Test
-    @Description("회원가입")
+    @DisplayName("회원가입")
 //    @Rollback(false) // 테스트에 @Transactional 이 적용되어 있어 기본적으로 rollback 을 하는데, 해당 어노테이션으로 commit 을 시킬 수 있음.
     void joinTest() {
         // given
@@ -40,7 +40,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @Description("중복 회원 예외")
+    @DisplayName("중복 회원 예외")
     void duplicateUserException() {
         // given
         Member member1 = new Member();

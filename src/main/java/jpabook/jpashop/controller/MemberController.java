@@ -9,24 +9,22 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/members/new")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping
+    @GetMapping("/members/new")
     public String createForm(Model model) {
         model.addAttribute("memberForm", new MemberForm());
         return "members/createMemberForm";
     }
 
-    @PostMapping
+    @PostMapping("/members/new")
     public String create(@Valid MemberForm memberForm, BindingResult bindingResult) {
         // @Valid 를 통해 오류가 발생하면, BindingResult 에 오류가 담긴채로 해당 코드를 쭉 실행함.
         // spring과 thymeleaf는 통합이 잘 되어 있음.
@@ -50,5 +48,11 @@ public class MemberController {
         memberService.join(member);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/members")
+    public String list(Model model) {
+        model.addAttribute("members", memberService.findMembers());
+        return "members/memberList";
     }
 }

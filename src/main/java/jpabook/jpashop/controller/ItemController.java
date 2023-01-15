@@ -53,7 +53,7 @@ public class ItemController {
     public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
         Book item = (Book) itemService.findOne(itemId); // 예제를 심플하게 하기 위한 코드임. 실제로 이렇게 타입 캐스트 하는 방법은 좋지 않음.
 
-        BookForm form = new BookForm();
+        BookForm form = new BookForm(); // setter 를 통한 값 셋팅은 실제론 권장하지 않음. 코드 분석에 혼란을 줌. -> 의미 있는 메소드를 생성해 값을 셋팅하자.
         form.setId(item.getId());
         form.setName(item.getName());
         form.setPrice(item.getPrice());
@@ -65,19 +65,29 @@ public class ItemController {
         return "items/updateItemForm";
     }
 
-    @PostMapping("/items/{itemId}/edit")
-    public String updateItem(@ModelAttribute("form") BookForm form) {
+//    @PostMapping("/items/{itemId}/edit")
+//    public String updateItem(@ModelAttribute("form") BookForm form) {
+//
+//        Book book = new Book(); // setter 를 통한 값 셋팅은 실제론 권장하지 않음. 코드 분석에 혼란을 줌. -> 의미 있는 메소드를 생성해 값을 셋팅하자.
+//        book.setId(form.getId());
+//        book.setName(form.getName());
+//        book.setPrice(form.getPrice());
+//        book.setStockQuantity(form.getStockQuantity());
+//        book.setAuthor(form.getAuthor());
+//        book.setIsbn(form.getIsbn());
+//
+//        추가로, 컨트롤러 계층에서 어설프게 엔티티를 생성하지 말자. 아래의 updateItem 메소드 처럼 식별자와 파라미터 또는 dto 를 생성해서 넘기자.
+//
+//        itemService.saveItem(book);
+//        return "redirect:/items";
+//    }
 
-        Book book = new Book();
-        book.setId(form.getId());
-        book.setName(form.getName());
-        book.setPrice(form.getPrice());
-        book.setStockQuantity(form.getStockQuantity());
-        book.setAuthor(form.getAuthor());
-        book.setIsbn(form.getIsbn());
-
-        itemService.saveItem(book);
+    /**
+     * 상품 수정,권장 코드
+     */
+    @PostMapping(value = "/items/{itemId}/edit")
+    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
+        itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
         return "redirect:/items";
     }
-
 }
